@@ -1,0 +1,3 @@
+*devenv/
+*.pyc
+*node_modules/
