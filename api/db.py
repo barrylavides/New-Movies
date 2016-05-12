@@ -3,6 +3,7 @@ from flask.ext.pymongo import PyMongo
 import os
 import uuid
 import scraper
+import urllib
 from flask import Response
 
 app = Flask(__name__)
@@ -42,12 +43,17 @@ def get_movies():
 
     for movie in movies:
         movie_list.append({
-            'cover_image': movie['cover_image'],
+            'cover_image': '/images/' + os.path.basename(movie['cover_image']),
             'title': movie['title'],
             'description': movie['description'],
             'vote': movie['vote'],
             'out_of': movie['out_of']
         })
+
+        fullpath = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'client/server/public/images'))
+        fullfilename = os.path.join(fullpath, os.path.basename(movie['cover_image']))
+        urllib.urlretrieve(movie['cover_image'], fullfilename)
+
 
     return jsonify({'movies': movie_list})
 
